@@ -1,7 +1,10 @@
 # DNS Tester & Internet Speed Test
 
+**Live demo:** <https://mrsergg.github.io/dns-speed-check/>
+
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
-[![Static site](https://img.shields.io/badge/deploy-GitHub%20Pages-2ea44f.svg)](.github/workflows/pages.yml)
+[![Tests](https://github.com/mrsergg/dns-speed-check/actions/workflows/tests.yml/badge.svg)](https://github.com/mrsergg/dns-speed-check/actions/workflows/tests.yml)
+[![Deploy](https://github.com/mrsergg/dns-speed-check/actions/workflows/pages.yml/badge.svg)](https://github.com/mrsergg/dns-speed-check/actions/workflows/pages.yml)
 [![No backend](https://img.shields.io/badge/backend-none-lightgrey.svg)](#architecture)
 
 A single-page, browser-only tool that tests public DNS resolvers and your internet speed. No backend, no accounts, no build step — it is plain HTML/CSS/JS and is published to GitHub Pages from this repository.
