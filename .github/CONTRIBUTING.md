@@ -1,24 +1,44 @@
 # Contributing
 
-Thanks for taking a look at the project. It is a dependency-free static site: plain HTML, CSS and browser JavaScript, with no build step.
+Проект — статический сайт без бэкенда: HTML, CSS и браузерный JavaScript, без сборки.
 
-## Before you change code
+## Локальный запуск
 
-- Run `npm ci` once, then `npm test` — the offline suite covers publishing rules, UI behaviour, header IP/location fallbacks and the DNS-info DOM flow.
-- Live checks (`npm run test:dns`, `node dev/fullrun.js`) make real DNS requests; results depend on your network and region.
-- Do not commit `node_modules/`, `_site/`, logs or `.env` files. The Pages workflow publishes only an explicit allowlist of static assets.
+Подойдёт любой файловый сервер:
 
-## Guidelines
+```sh
+npx http-server . -p 8484
+# или
+python -m http.server 8484
+```
 
-- Keep the site backend-free: everything must work when served as static files (including from a subpath such as `https://<owner>.github.io/<repo>/`).
-- If you change what data is sent to third parties, update `legal.html`, the privacy section of `README.md` and `THIRD-PARTY-NOTICES.md` in the same change.
-- Keep the DNS provider list factual; it is a curated directory, not a popularity ranking.
-- Do not add trackers, analytics or requests to a project-owned backend.
+Откройте <http://localhost:8484/>. Для DoH и WebSocket нужен HTTPS или `localhost` — на опубликованном сайте HTTPS даёт GitHub Pages.
 
-## Reporting issues
+## Тесты
 
-Include your browser, OS, region/VPN state, the resolver being tested and the exact error text from the browser console. DNS, CORS and DNSSEC results are network-dependent, so a failing resolver may be blocked locally rather than broken globally.
+```sh
+npm ci
+npm test
+```
 
-## License
+`npm test` — офлайн-проверки публикации, интерфейса, шапки и dnsinfo. Живые запросы к DNS: `npm run test:dns`.
 
-Contributions are accepted under the project license, GNU AGPL-3.0 (see `LICENSE` and `NOTICE`).
+## Публикация
+
+Сайт собирается workflow `.github/workflows/pages.yml` и публикуется на GitHub Pages. В настройках репозитория: **Settings → Pages → Source: GitHub Actions**. В артефакт попадают только статические файлы.
+
+## Правила
+
+- Сайт должен работать как статика, в том числе из подпапки (`https://<owner>.github.io/<repo>/`).
+- Если меняется состав данных, отправляемых третьим сторонам, обновите `legal.html`, раздел «Приватность» в `README.md` и `THIRD-PARTY-NOTICES.md`.
+- Список DNS-серверов — справочник, а не рейтинг популярности.
+- Не добавляйте трекеры, аналитику и запросы к собственному бэкенду.
+- Не коммитьте `node_modules/`, `_site/`, логи и `.env`.
+
+## Сообщения об ошибках
+
+Укажите браузер, ОС, регион/VPN, тестируемый резолвер и текст ошибки из консоли. Результаты DNS, CORS и DNSSEC зависят от сети, поэтому недоступный резолвер может блокироваться локально.
+
+## Лицензия
+
+Вклад принимается под GNU AGPL-3.0 — см. `LICENSE` и `NOTICE`.
