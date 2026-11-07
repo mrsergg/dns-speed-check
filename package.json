@@ -1,7 +1,7 @@
 {
   "name": "dns-speed-check",
   "version": "1.0.0",
-  "description": "Browser-only DNS resolver tester and internet speed test with DNSSEC and ad-block checks — static site for GitHub Pages.",
+  "description": "Browser DNS and internet speed tester: DNSSEC, ad-block check, resolver info and speedtest. Static site, no backend.",
   "homepage": "https://mrsergg.github.io/dns-speed-check/",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "node dev/securitytest.js && node dev/static-check.js && node dev/uitest.js && node dev/headertest.js && node dev/dnsinfotest.js",
     "test:dns": "node dev/smoke.js",
-    "start": "node server.js"
+    "start": "npx --yes http-server . -p 8484 -c-1"
   },
   "keywords": ["dns", "dnssec", "doh", "dns-over-https", "speedtest", "network-diagnostics", "github-pages", "vanilla-js"],
   "author": "DNS Tester contributors",

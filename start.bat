@@ -1,6 +1,6 @@
 @echo off
-rem Legacy Windows helper. Requires Node.js and npm; GitHub Pages users do not need this.
+rem Local static preview. The repository contains no server code.
 cd /d "%~dp0"
 start "" "http://localhost:8484"
-node server.js
+npx --yes http-server . -p 8484 -c-1
 pause

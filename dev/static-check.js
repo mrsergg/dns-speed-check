@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const root = path.resolve(__dirname,'..');
 const html = fs.readFileSync(path.join(root,'index.html'),'utf8');
-const siteFiles = ['index.html','style.css','app.js','providers.js','speedtest.js','dnsinfo.js','legal.html','LICENSE','THIRD-PARTY-NOTICES.md','NOTICE'];
+const siteFiles = ['index.html','style.css','app.js','providers.js','speedtest.js','dnsinfo.js','legal.html','LICENSE','THIRD-PARTY-NOTICES.md','NOTICE','social-preview.png'];
 const missing = [];
 for (const file of siteFiles) {
   const attr = file.endsWith('.css') ? `href="${file}"` : file.endsWith('.js') ? `src="${file}"` : null;
@@ -10,6 +10,7 @@ for (const file of siteFiles) {
   if (!fs.existsSync(path.join(root,file))) missing.push(`Missing ${file}`);
 }
 if (!html.includes('href="legal.html"')) missing.push('index.html does not link to legal.html');
+if (!html.includes('social-preview.png')) missing.push('index.html does not reference the social preview image');
 if (!html.includes('<footer class="legal-notice"')) missing.push('Legal info must be a plain bottom bar (footer.legal-notice), not a card');
 if (html.includes('class="card legal-notice"')) missing.push('Legal info must not use the card style');
 const workflow = fs.readFileSync(path.join(root,'.github','workflows','pages.yml'),'utf8');
