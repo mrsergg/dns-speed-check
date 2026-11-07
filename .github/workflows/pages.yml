@@ -40,10 +40,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
-        with:
-          # Если Pages ещё не включён в настройках, включить его автоматически
-          # (Source: GitHub Actions), чтобы деплой не падал на первом запуске.
-          enablement: true
       - name: Prepare static site
         run: |
           mkdir -p _site

@@ -75,9 +75,11 @@ Live endpoints can be blocked or rate-limited depending on your network and regi
 
 ## Deploy to GitHub Pages
 
-1. Create a public repository and push the source (`.gitignore` already excludes `node_modules/`, logs and local artifacts).
-2. In **Settings → Pages**, set **Source** to **GitHub Actions**.
-3. Push to `main`. `.github/workflows/pages.yml` runs the tests, copies an explicit allowlist of site files to `_site/`, replaces the `__SOURCE_URL__` placeholder with your repository URL, and deploys the artifact.
+GitHub Pages on the free plan requires a **public** repository. If **Settings → Pages** shows only a "Custom domain" block and no **Source** selector, the repository is still private (or Pages is disabled for it) — make the repository public first.
+
+1. Create a **public** GitHub repository and push the source (`.gitignore` already excludes `node_modules/`, logs and local artifacts).
+2. In **Settings → Pages → Build and deployment**, set **Source** to **GitHub Actions**.
+3. Push to `main` (or run the workflow manually from the **Actions** tab). `.github/workflows/pages.yml` runs the tests, copies an explicit allowlist of site files to `_site/`, replaces the `__SOURCE_URL__` placeholder with your repository URL, and deploys the artifact.
 4. The site URL appears under **Settings → Pages** (usually `https://<owner>.github.io/<repo>/`).
 
 Only the static site files are published: no `server.js`, tests, lockfiles or dev tooling.
