@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="theme-color" content="#0b0f17">
+ <title>Лицензия и приватность — DNS Tester</title>
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+ <div class="brand"><span class="logo">🛰️</span><div><h1>Лицензия и приватность</h1><p class="sub">DNS Tester &amp; Speedtest</p></div></div>
+ <a class="btn ghost" href="index.html">← Вернуться к тестам</a>
+</header>
+<main>
+ <section class="card">
+  <h2>Открытый исходный код</h2>
+  <p>Исходный код публично размещается в этом <a href="__SOURCE_URL__">GitHub-репозитории</a>. Полный текст лицензии и условия указаны ниже.</p>
+  <p><a href="LICENSE">Полный текст AGPL-3.0</a> · <a href="THIRD-PARTY-NOTICES.md">Сведения о сторонних проектах</a></p>
+  <p>Программа предоставляется «как есть», без гарантий, насколько это допускается применимым законодательством. См. разделы 15–16 AGPL-3.0.</p>
+ </section>
+ <section class="card">
+  <h2>Передача данных при тестировании</h2>
+  <ul>
+   <li>При загрузке страницы IP и примерный город определяются через ipwho.is (резервные сервисы: ipapi.co, ipinfo.io).</li>
+   <li>DNS-тесты посылают DNS-запросы выбранным DoH-резолверам; ad-block проверка дополнительно сверяет контрольный домен с Google Public DNS. DNS-задержка измеряется по уникальным именам под null-addr.com через системный DNS браузера.</li>
+   <li>Кнопка «Определить информацию» обращается к dnscheck.tools, addr.tools и ipwho.is; тест передаёт им запросы и публичный IP.</li>
+   <li>Speedtest загружает/отправляет тестовые данные сервисам Cloudflare и httpbin (резерв download/upload).</li>
+  </ul>
+  <p>Операторы этих сервисов могут получать ваш IP и сетевые метаданные. Результаты тестирования не отправляются на сервер, принадлежащий этому проекту.</p>
+ </section>
+ <section class="card">
+  <h2>Сторонние компоненты</h2>
+  <p>Методика DNS-информационного теста частично вдохновлена <a href="https://github.com/brianshea2/addr.tools">addr.tools</a> (AGPL-3.0). Код OpenSpeedTest изучался как reference; его исходники сюда не включены.</p>
+  <p>Список DNS-серверов является curated directory, не рейтингом по доле рынка. Доступность, CORS, задержка и фильтрация зависят от региона и сети.</p>
+ </section>
+</main>
+</body>
+</html>

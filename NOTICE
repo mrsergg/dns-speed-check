@@ -1,0 +1,7 @@
+# Copyright and attribution
+
+Copyright (C) 2026 DNS Tester contributors.
+
+The DNS tester is a browser implementation with a test approach inspired in part by `brianshea2/addr.tools` (AGPL-3.0). This project is not affiliated with or endorsed by that project or the listed DNS operators.
+
+Unless noted in a file or third-party notice, the project source is offered under GNU AGPL-3.0; see `LICENSE`.

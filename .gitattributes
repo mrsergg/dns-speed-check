@@ -1,0 +1,4 @@
+# Normalize line endings: LF in the repository (needed for Linux GitHub Actions),
+# CRLF only for Windows batch files.
+* text=auto eol=lf
+*.bat text eol=crlf

@@ -1,0 +1,3 @@
+# Publication note
+
+This checklist replaces obsolete early project notes. For current setup, privacy disclosures, testing, and deployment guidance, see [README.md](README.md). The public GitHub Pages site is static; `server.js` is a legacy local-only helper.

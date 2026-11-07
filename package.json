@@ -1,0 +1,18 @@
+{
+  "name": "dns-speed-check",
+  "version": "1.0.0",
+  "description": "Browser-only DNS resolver tester and internet speed test with DNSSEC and ad-block checks — static site for GitHub Pages.",
+  "main": "app.js",
+  "scripts": {
+    "test": "node dev/securitytest.js && node dev/static-check.js && node dev/uitest.js && node dev/headertest.js && node dev/dnsinfotest.js",
+    "test:dns": "node dev/smoke.js",
+    "start": "node server.js"
+  },
+  "keywords": ["dns", "dnssec", "doh", "dns-over-https", "speedtest", "network-diagnostics", "github-pages", "vanilla-js"],
+  "author": "DNS Tester contributors",
+  "license": "AGPL-3.0",
+  "type": "commonjs",
+  "devDependencies": {
+    "jsdom": "^30.1.3"
+  }
+}

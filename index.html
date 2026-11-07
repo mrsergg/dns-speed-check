@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>DNS Тестер &amp; Speedtest</title>
+ <meta name="description" content="Браузерный тест публичных DNS-серверов: скорость, DNSSEC, блокировка рекламы, проверка внешнего IP, DNS-резолверов и интернет-скорости. Без установки и без бэкенда.">
+ <meta name="theme-color" content="#0b0f17">
+ <meta property="og:type" content="website">
+ <meta property="og:site_name" content="DNS Тестер &amp; Speedtest">
+ <meta property="og:title" content="DNS Тестер &amp; Speedtest">
+ <meta property="og:description" content="Проверьте скорость и корректность публичных DNS, DNSSEC, внешний IP и скорость интернета прямо в браузере.">
+ <meta name="twitter:card" content="summary">
+ <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="matrixCanvas" aria-hidden="true"></canvas>
+
+<header class="topbar">
+ <div class="brand">
+ <span class="logo">🛰️</span>
+ <div>
+ <h1>DNS Тестер &amp; Speedtest</h1>
+ <p class="sub">Проверка интернета в один клик</p>
+ </div>
+ </div>
+ <div class="you" id="you">
+  <div class="you-row">📍 <span id="geo" class="muted">определяем…</span></div>
+  <div class="you-row">🌐 <span id="myip" class="muted">определяем…</span></div>
+  </div>
+</header>
+
+<main>
+
+ <!-- ================= Speedtest ================= -->
+ <section class="card" id="card-speed">
+ <div class="card-head">
+ <h2>🚀 Speedtest</h2>
+ <p class="sub">Ping, скачивание и загрузка — без установки</p>
+ </div>
+ <div class="run-row">
+ <button id="btn-speedtest-run" class="btn primary big">▶ Запустить тест</button>
+ <button id="btn-speedtest-reset" class="btn ghost">↻ Сброс</button>
+ <span id="st-status" class="run-status">Готов к тесту</span>
+ </div>
+ <div id="speedtest-results" class="speedtest-results"></div>
+ </section>
+
+ <!-- ================= DNS ================= -->
+ <section class="card" id="card-dns">
+ <div class="card-head">
+ <h2>🛰️ DNS Тест</h2>
+ <p class="sub">Скорость, ошибки, DNSSEC и блокировка рекламы у публичных DNS</p>
+ </div>
+
+ <div class="toolbar">
+ <span class="chip" data-preset="top">⭐ Рекомендуемый набор</span>
+ <span class="chip" data-preset="all">☑ Все</span>
+ <span class="chip" data-preset="none">☐ Снять</span>
+ <span class="chip" data-preset="adblock">🚫 Фильтрующие</span>
+ <span class="chip" data-preset="privacy">🕶 Приватные</span>
+ </div>
+
+ <div class="toolbar2">
+ <label>Запросов: <span class="number-control"><button type="button" data-number="numFreq" data-step="-1" aria-label="Уменьшить число запросов">−</button><input type="number" id="numFreq" min="3" max="20" value="6"><button type="button" data-number="numFreq" data-step="1" aria-label="Увеличить число запросов">+</button></span></label>
+ <label>Таймаут, мс: <span class="number-control"><button type="button" data-number="numTimeout" data-step="-1" aria-label="Уменьшить таймаут">−</button><input type="number" id="numTimeout" min="1000" max="10000" step="500" value="4000"><button type="button" data-number="numTimeout" data-step="1" aria-label="Увеличить таймаут">+</button></span></label>
+ <label class="chk"><input type="checkbox" id="chkAdtest" checked> блокировка рекламы</label>
+ <span class="hint">Больше запросов — точнее, дольше</span>
+ </div>
+
+ <div class="run-row">
+ <button id="btnRun" class="btn primary big">▶ Запустить тест</button>
+ <button id="btnStop" class="btn danger hidden">■ Стоп</button>
+ <div class="progress" id="progress"><div id="progressBar"></div></div>
+ <span id="runStatus" class="run-status">Не запускалось</span>
+ </div>
+
+ <div id="providerList" class="plist"></div>
+
+ <div class="custom-add">
+ <input type="text" id="customDoh" placeholder="Своя DoH-ссылка, напр. https://dns.example.com/dns-query">
+ <button id="btnAddCustom" class="btn ghost">+ Добавить</button>
+ </div>
+
+ <div id="recommendation" class="reco hidden"></div>
+
+ <div class="table-wrap">
+ <table id="resultsTable">
+ <thead>
+ <tr>
+ <th></th><th>DNS-сервер</th>
+ <th class="sortable" data-s="median">Медиана, мс ▾</th>
+ <th class="sortable" data-s="min">Минимум</th>
+ <th class="sortable" data-s="connect">Connect</th>
+ <th class="sortable" data-s="loss">Ошибки</th>
+ 
+ </tr>
+ </thead>
+ <tbody id="resultsBody"></tbody>
+ </table>
+ </div>
+
+ <div class="res-actions">
+ <button id="btnCsv" class="btn ghost" disabled>⬇ Скачать CSV</button>
+ <button id="btnRerun" class="btn ghost" disabled>↻ Перепроверить</button>
+ </div>
+ </section>
+
+ <!-- ================= DNS Leak / DNSSEC info ================= -->
+ <section class="card" id="card-dnsinfo">
+  <div class="card-head">
+   <h2>🛡️ Информация о подключении и DNS</h2>
+   <p class="sub">Покажет внешний IP, DNS-резолверы и проверку DNSSEC. При запуске тестовые запросы и IP-адреса передаются сервисам dnscheck.tools, addr.tools и ipwho.is для определения резолвера, организации, PTR и примерной геолокации.</p>
+  </div>
+  <div class="dnsinfo-actions">
+   <button id="btnDnsInfo" class="btn primary">🔎 Определить информацию</button>
+   <span id="dnsInfoStatus" class="run-status" aria-live="polite">Тест запускается только по нажатию.</span>
+  </div>
+  <div id="dnsInfoResults" class="dnsinfo-results hidden">
+   <div class="dnsinfo-panel">
+    <h3>Ваши IP-адреса</h3>
+    <div id="dnsInfoClient" class="dnsinfo-list"></div>
+   </div>
+   <div class="dnsinfo-panel">
+    <h3>Обнаруженные DNS-резолверы</h3>
+    <div id="dnsInfoResolvers" class="dnsinfo-list"></div>
+    <p class="hint">Показываются резолверы, которые выполнили тестовые DNS-запросы. При использовании VPN, прокси или DNS-over-HTTPS список может отличаться от настроек системы.</p>
+   </div>
+   <div class="dnsinfo-panel">
+    <h3>Проверка DNSSEC</h3>
+    <div class="table-wrap dnssec-wrap">
+     <table class="dnssec-table">
+      <thead><tr><th>Подпись</th><th>ECDSA P-256</th><th>ECDSA P-384</th><th>Ed25519</th><th>ML-DSA-44</th></tr></thead>
+      <tbody>
+       <tr><th>Корректная</th><td data-dnssec="valid-0">—</td><td data-dnssec="valid-1">—</td><td data-dnssec="valid-2">—</td><td data-dnssec="valid-3">—</td></tr>
+       <tr><th>Повреждённая</th><td data-dnssec="bad-0">—</td><td data-dnssec="bad-1">—</td><td data-dnssec="bad-2">—</td><td data-dnssec="bad-3">—</td></tr>
+       <tr><th>Просроченная</th><td data-dnssec="expired-0">—</td><td data-dnssec="expired-1">—</td><td data-dnssec="expired-2">—</td><td data-dnssec="expired-3">—</td></tr>
+       <tr><th>Без подписи</th><td data-dnssec="missing-0">—</td><td data-dnssec="missing-1">—</td><td data-dnssec="missing-2">—</td><td data-dnssec="missing-3">—</td></tr>
+      </tbody>
+     </table>
+    </div>
+    <p class="hint">PASS — резолвер повёл себя правильно: валидная подпись разрешилась, а повреждённая, просроченная или отсутствующая отклонена. FAIL — резолвер принял невалидную подпись. FAIL* — зона без подписи разрешилась: DNSSEC для неё не применяется. Некоторые алгоритмы могут не поддерживаться вашей сетью или резолвером.</p>
+   </div>
+   <div id="dnsInfoSummary" class="dnsinfo-summary"></div>
+    <div class="dnsinfo-panel dns-latency-panel">
+     <h3>Задержка DNS</h3>
+     <div id="dnsInfoLatency" class="dnsinfo-latency" aria-live="polite">— мс</div>
+     <p class="hint">Среднее время разрешения тестовых доменов через ваш текущий системный DNS. Это не ping до IP-адреса сервера.</p>
+    </div>
+  </div>
+ </section>
+
+ <!-- ================= Адреса ================= -->
+ <section class="card" id="card-addrs">
+ <div class="card-head">
+ <h2>📋 Адреса DNS-серверов</h2>
+ <p class="sub">Готовые адреса для роутера или телефона</p>
+ </div>
+ <div class="toolbar">
+ <input type="text" id="addrFilter" class="filter-input" placeholder="🔍 поиск по названию или IP…">
+ </div>
+ <div class="table-wrap">
+ <table id="addrTable">
+ <thead>
+ <tr><th>DNS</th><th>DNS1</th><th>DNS2</th><th>IPv6</th><th>DoH</th><th>DoT</th><th></th></tr>
+ </thead>
+ <tbody id="addrBody"></tbody>
+ </table>
+ </div>
+ </section>
+
+</main>
+
+
+
+<script src="providers.js"></script>
+<script src="speedtest.js"></script>
+<script src="app.js"></script>
+<script src="dnsinfo.js"></script>
+
+<footer class="legal-notice" aria-label="Лицензия и исходный код">
+ <p class="small">Свободное ПО по <a href="legal.html">GNU AGPL-3.0</a> · <a href="legal.html">Приватность и сторонние сервисы</a> · <a href="__SOURCE_URL__">Исходный код</a>. Программа предоставляется «как есть», без гарантий.</p>
+</footer>
+
+</body>
+</html>
